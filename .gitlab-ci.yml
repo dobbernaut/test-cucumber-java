@@ -15,5 +15,5 @@ test:
     - docker network create test-network
     - >
       docker run --name claims-form-test --network test-network --mount type=bind,source=$(pwd),target="/claims"
-      --entrypoint /bin/bash openjdk:17.0.2-jdk
-      -c "cd claims && ./gradlew cucumber -Denv=headless"
+      --entrypoint /bin/bash openjdk:17.0.2-slim-buster
+      -c "cd claims && ./install.sh && cd cucumber && ls -la && ./gradlew cucumber -Denv=headless"
