@@ -1,12 +1,10 @@
+version: '3.7'
+
 services:
     app:
-        build:
-          context: ./
-          dockerfile: app-blog/scripts/docker/Dockerfile-app
-        ports:
-            - "5250:5250"
-
-networks:
-  default:
-    external:
-      name: test-network
+      container_name: 'test-app'
+      build:
+        context: ./
+        dockerfile: app-blog/scripts/docker/Dockerfile-app
+      ports:
+          - "5250:5250"

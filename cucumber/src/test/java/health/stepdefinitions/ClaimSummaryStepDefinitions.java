@@ -12,7 +12,7 @@ public class ClaimSummaryStepDefinitions implements En {
     public ClaimSummaryStepDefinitions() {
 
         Given("I navigate to the claim summary form page", () -> {
-            Hooks.driver.get("http://127.0.0.1:5250");
+            Hooks.driver.get("http://blog-api:5250");
             String title = Hooks.driver.getTitle();
             System.out.println("!!! TITLE !!! - " + title);
         });
