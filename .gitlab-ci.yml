@@ -18,6 +18,7 @@ build:
   rules:
   - changes:
       - service-blog/**/*
+      - .gitlab-ci.yml
 
 build app image:
   stage: build-container
@@ -34,7 +35,8 @@ build app image:
     - docker push $CI_REGISTRY_IMAGE/service-blog
   rules:
   - changes:
-      - app-blog/**/*
+      - service-blog/**/*
+      - .gitlab-ci.yml
 
 build cucumber image:
   stage: build-container
@@ -43,26 +45,27 @@ build cucumber image:
     - docker:19.03.13-dind
   script:
     - docker login --username $CI_REGISTRY_USER --password $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE/cucumber -f ./scripts/docker/Dockerfile-cucumber .
-    - docker push $CI_REGISTRY_IMAGE/cucumber
+    - docker build -t $CI_REGISTRY_IMAGE/cucumber-openjdk17 -f ./scripts/docker/Dockerfile-cucumber .
+    - docker push $CI_REGISTRY_IMAGE/cucumber-openjdk17
   rules:
   - changes:
       - scripts/docker/Dockerfile-cucumber
+      - .gitlab-ci.yml
 
 test:
   stage: test-integration
-  image: $CI_REGISTRY_IMAGE/cucumber
+  image: $CI_REGISTRY_IMAGE/cucumber-openjdk17
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
     DOCKER_DRIVER: overlay2
   services:
-    - name: $CI_REGISTRY_IMAGE/blog-api
-      alias: blog-api
+    - name: $CI_REGISTRY_IMAGE/service-blog
+      alias: service-blog
   script:
-    - ./scripts/wait-for-service-ready.sh http://blog-api:5250/posts 200 app
+    - ./scripts/wait-for-service-ready.sh http://service-blog:5250/posts 200 app
     - cd test
-    - gradle cucumber -Denv=ci
+    - ENVIRONMENT=ci gradle cucumber
 
 workflow:
   rules:

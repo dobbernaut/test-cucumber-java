@@ -1,8 +1,10 @@
-FROM openjdk:17.0.2-jdk-buster
+FROM gradle:7.3.1-jdk17 as builder
+RUN gradle clean build --no-daemon > /dev/null 2>&1 || true
 
+FROM gradle:7.3.1-jdk17
+COPY --from=builder /root/.gradle /root/.gradle
 RUN apt-get update && apt-get install -y \
   wget \
   sudo
-
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 RUN sudo apt install -y ./google-chrome-stable_current_amd64.deb
