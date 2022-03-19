@@ -1,0 +1,25 @@
+{
+  "recommendations": [
+    "DotJoshJohnson.xml",
+    "eamodio.gitlens",
+    "EditorConfig.EditorConfig",
+    "humao.rest-client",
+    "mhutchie.git-graph",
+    "redhat.java",
+    "redhat.vscode-yaml",
+    "shd101wyy.markdown-preview-enhanced",
+    "tht13.html-preview-vscode",
+    "tomoki1207.pdf",
+    "VisualStudioExptTeam.vscodeintellicode",
+    "vscjava.vscode-java-debug",
+    "vscjava.vscode-java-dependency",
+    "vscjava.vscode-java-pack",
+    "vscjava.vscode-java-test",
+    "vscjava.vscode-maven",
+    "vscjava.vscode-gradle",
+    "yzhang.markdown-all-in-one",
+    "grapecity.gc-excelviewer",
+    "timonwong.shellcheck",
+    "alexkrechik.cucumberautocomplete"
+  ],
+}
