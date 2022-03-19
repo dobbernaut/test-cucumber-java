@@ -1,9 +1,9 @@
 FROM node:16.14.0-alpine3.15
 
 RUN mkdir src
-COPY ./app-blog/package.json src
-COPY ./app-blog/yarn.lock src
-COPY ./app-blog/dist src
+COPY ./service-blog/package.json src
+COPY ./service-blog/yarn.lock src
+COPY ./service-blog/dist src
 WORKDIR /src
 
 RUN adduser --disabled-password appuser

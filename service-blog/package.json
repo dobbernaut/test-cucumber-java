@@ -1,5 +1,5 @@
 {
-  "name": "sample-gitlab-project",
+  "name": "service-blog",
   "version": "1.0.0",
   "main": "index.js",
   "author": "Noel Sevilla",
@@ -8,7 +8,6 @@
     "build": "rm -rf dist && yarn tsc",
     "lint": "eslint ./src",
     "test": "jest ./src",
-    "test-integration": "jest ./tests/integration",
     "start-dev": "nodemon src/app/app.ts",
     "start": "node app.js"
   },
