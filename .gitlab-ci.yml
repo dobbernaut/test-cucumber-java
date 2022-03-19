@@ -61,8 +61,8 @@ test:
       alias: blog-api
   script:
     - ./scripts/wait-for-service-ready.sh http://blog-api:5250/posts 200 app
-    - cd cucumber
-    - ./gradlew cucumber -Denv=ci
+    - cd test
+    - gradle cucumber -Denv=ci
 
 workflow:
   rules:
