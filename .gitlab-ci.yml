@@ -4,20 +4,24 @@ stages:
   - build-app
   - build-container
   - test-integration
+  - release-container
+
+variables:
+  IMAGE_TAG: "latest"
 
 build:
   stage: build-app
   script:
-    - cd service-blog
+    - cd service-mock
     - yarn install --frozen-lockfile
     - yarn build
   artifacts:
     expire_in: 10 days
     paths:
-      - service-blog/dist/
+      - service-mock/dist/
   rules:
   - changes:
-      - service-blog/**/*
+      - service-mock/**/*
       - .gitlab-ci.yml
 
 build app image:
@@ -31,12 +35,16 @@ build app image:
     - docker:19.03.13-dind
   script:
     - docker login --username $CI_REGISTRY_USER --password $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE/service-blog -f ./service-blog/scripts/docker/Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE/service-blog
+    - docker build -t $CI_REGISTRY_IMAGE/service-mock:$CI_COMMIT_SHORT_SHA -f ./service-mock/scripts/docker/Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE/service-mock:$CI_COMMIT_SHORT_SHA
+    - echo "IMAGE_TAG=$CI_COMMIT_SHORT_SHA" >> build.env
   rules:
   - changes:
-      - service-blog/**/*
+      - service-mock/**/*
       - .gitlab-ci.yml
+  artifacts:
+    reports:
+      dotenv: build.env
 
 build cucumber image:
   stage: build-container
@@ -60,12 +68,34 @@ test:
     DOCKER_TLS_CERTDIR: ""
     DOCKER_DRIVER: overlay2
   services:
-    - name: $CI_REGISTRY_IMAGE/service-blog
-      alias: service-blog
+    - name: $CI_REGISTRY_IMAGE/service-mock:$IMAGE_TAG
+      alias: service-mock
   script:
-    - ./scripts/wait-for-service-ready.sh http://service-blog:5250/posts 200 app
+    - ./scripts/wait-for-service-ready.sh http://service-mock:5250/posts service-mock
     - cd test
     - ENVIRONMENT=ci gradle cucumber
+  artifacts:
+    expire_in: 10 days
+    paths:
+      - test/reports/*
+    reports:
+      junit: test/reports/cucumber.xml
+    when: always
+
+latest container:
+  stage: release-container
+  image: docker
+  services:
+    - docker:19.03.13-dind
+  script:
+    - docker login --username $CI_REGISTRY_USER --password $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE/claims-form:latest -f ./app/scripts/docker/Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE/claims-form:latest
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+      - service-mock/**/*
+      - .gitlab-ci.yml
 
 workflow:
   rules:
