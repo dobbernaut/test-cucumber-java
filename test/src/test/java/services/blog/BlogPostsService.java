@@ -15,7 +15,7 @@ public class BlogPostsService {
     public BlogPostsService() {
         String environment = System.getenv("ENVIRONMENT");
         baseUrl = "ci".equals(environment)
-            ? "http://service-blog:5250"
+            ? "http://service-mock:5250"
             : "http://localhost:5250";
     }
 
