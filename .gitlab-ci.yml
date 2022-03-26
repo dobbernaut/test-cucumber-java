@@ -89,10 +89,10 @@ latest container:
     - docker:19.03.13-dind
   script:
     - docker login --username $CI_REGISTRY_USER --password $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE/claims-form:latest -f ./app/scripts/docker/Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE/claims-form:latest
+    - docker build -t $CI_REGISTRY_IMAGE/service-mock:latest -f ./service-mock/scripts/docker/Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE/service-mock:latest
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "master"'
       changes:
       - service-mock/**/*
       - .gitlab-ci.yml
