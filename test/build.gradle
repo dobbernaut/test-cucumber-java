@@ -61,7 +61,7 @@ task cucumber() {
                 '--plugin', 'pretty',
                 '--plugin', 'junit:reports/cucumber.xml',
                 '--plugin', 'json:reports/results.json',
-                '--glue', 'cucumber/stepdefinitions', 'src/test/resources/cucumber/features'
+                '--glue', 'cucumber/stepdefinitions', 'src/test/java/cucumber/features'
             ]
         }
     }
